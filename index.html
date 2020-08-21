@@ -1,0 +1,127 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt" lang="pt">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Teste JSON</title>
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="css/bootstrap.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="js/bootstrap.min.js"></script>
+<script type="text/javascript" language="javascript">
+   $(document).ready(function() {
+			$.ajax({
+			  type: 'POST',
+			  url: 'countries.json',
+			  data: { patientID: "1" },
+			  contentType: 'application/json; charset=utf-8',
+			  dataType: 'json',
+			  success: function(jsonData) {
+
+				JSONint(jsonData);
+			  },
+			  error: function() {
+				alert('Error loading PatientID=');
+			  }
+			});
+   });
+
+// JSONint | funcao executa apos ler JSON 
+function JSONint(jsonData) {
+	var db = new Array();
+	var continente = new Array();
+	var x , y ,conteudo, classe, paises;
+	paises = jsonData.countries;
+	
+	// move valores para array
+	$.each(paises, function(index, el) {
+		db[index]=[el.continent,el.name,parseInt(el.population)];
+		continente[index]=el.continent ;
+    });	
+	
+	//ordena continentes
+	continente = unique(continente);
+	continente.sort();
+	
+	//ordena db por populacao
+	db.sort(function (element_a, element_b) {
+		return element_b[2] - element_a[2];
+	});
+
+	
+	// inclui botao continente
+	for ( x = 0; x < continente.length; x++ ) {
+		 classe=continente[x].toLowerCase().replace('/\s/g','-');
+		 conteudo='<div class="accordion-group"><div class="accordion-heading"> ';
+				conteudo+='<a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#stage" href="#'+classe+'"><button type="button" class="btn btn-default">'+ continente[x] +'</button></a>';
+				conteudo+='</div>';
+				conteudo+='<div style="height: 0px;" id="'+classe+'" class="accordion-body collapse"><div class="accordion-inner">';
+				
+				//inclui paises e populacao
+				for ( y = 0; y < db.length; y++ ) {
+					if(continente[x]==db[y][0]){
+					 	conteudo+='<p>População: ' + db[y][2]  +'| País: '+ db[y][1]  +'</p>';
+					}
+				 }
+				conteudo+='</div></div></div>' 
+				$('#stage').append(conteudo);
+	 
+	}
+
+}
+	
+// funcao q remove elementos repetidos do array
+var unique = function(origArr) {
+    var newArr = [],
+    origLen = origArr.length,
+    found,
+    x, y;
+    for ( x = 0; x < origLen; x++ ) {
+    found = undefined;
+		for ( y = 0; y < newArr.length; y++ ) {
+			if ( origArr[x] === newArr[y] ) {
+			found = true;
+			break;
+			}
+		}
+    	if ( !found) newArr.push( origArr[x] );
+    }
+    return newArr;
+}
+
+   </script>
+</head>
+<body>
+<br>
+<div class="container">
+  <div class="row">
+    <div class="col-lg-8 highlight">
+      <h1>Teste JSON</h1>
+      <pre>
+        <code class="html">
+        {
+            "countries":
+                [
+                    {"name": "EUA", "population": "57896969", "continent": "America"},
+                    {"name": "Mexico", "population": "8693453", "continent": "America"},
+                    {"name": "Brasil", "population": "211213121", "continent": "America"},
+                    {"name": "Reino Unido", "population": "34585685", "continent": "Europa"},
+                    {"name": "Espanha", "population": "3445768", "continent": "Europa"},
+                    {"name": "Alemanha", "population": "1231546", "continent": "Europa"},
+                    {"name": "Russia", "population": "24145576", "continent": "Asia"},
+                    {"name": "China", "population": "957567", "continent": "Asia"},
+                    {"name": "Taiwan", "population": "242356", "continent": "Asia"}
+                ]
+        }
+        </code>
+      </pre>
+      <p>Nesse json vc tem uma lista de paises e cada pais tem sua propria informação. nome, populacao e continente. O que vc precisa fazer é criar uma pagina html com botoes listando os continentes e quando clica em um botao continente, abra embaixo os paises desses continentes ordenados corretamente por total da populacao decrescente. Simples nao? clicou em um continente a lista do outro some. Clocou no mesmo continente a lista aberta some. Seria legal se a lista de continentes fosse criada automaticamente.</p>
+    </div>
+    <div class="col-lg-4 ">
+      <h2>Resultado:</h2>
+      <div class="accordion" id="stage"> </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
