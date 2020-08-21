@@ -1,5 +1,5 @@
 # testeJSON
- ///
+\\\
          {
             "countries":
                 [
@@ -14,5 +14,5 @@
                     {"name": "Taiwan", "population": "242356", "continent": "Asia"}
                 ]
         }
- ///
+\\\
 Nesse json vc tem uma lista de paises e cada pais tem sua propria informação. nome, populacao e continente. O que vc precisa fazer é criar uma pagina html com botoes listando os continentes e quando clica em um botao continente, abra embaixo os paises desses continentes ordenados corretamente por total da populacao decrescente. Simples nao? clicou em um continente a lista do outro some. Clocou no mesmo continente a lista aberta some. Seria legal se a lista de continentes fosse criada automaticamente.
